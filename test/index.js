@@ -1,30 +1,67 @@
 var tokenizer = require('../src')
+  
+print('One match for token')
 
   tokenizer()
     .input('#aa test')
-    .token('tag', /#(\w{2})\ /)
-    .token('input', /.+/)
-    .walk(function(token, value, match) {
-      console.log('Tokens', token, value, match)
+    .token({ tag: /#(\w{2})\ / })
+    .token({ input: /.+/ })
+    .walk(function(type, value, match) {
+      console.log(type, value, match)
     })
 
-  //SKIP token when value is different than expected value
-  //there is a match but i.e. expected business logic do not recognize such value
+print('From Object and strings')
+
+  tokenizer()
+    .input('#aa test')
+    .tokens({tag: '#(\\w{2})\\ ', input: '.+'})
+    .walk(function(type, value, match) {
+      console.log(type, value, match)
+    })
+
+print('Many matches for same token')
+
   tokenizer()
     .input('#aa #bb #cc test')
-    .token('tag', /#(\w{2})\ /)
-    .token('input', /.+/)
-    .walk(function(token, value, match) {
-      // if(token == 'tag' && ['aa','bb'].indexOf(value) > -1) return false
-
-      console.log('Tokens', token, value, match)
+    .token({ tag: /#(\w{2})\ / })
+    .token({ input: /.+/ })
+    .walk(function(type, value, match) {
+      console.log(type, value, match)
     })
 
-  //Resolve to object { tokenName: tokenValue }
+
+print('Skip token when additional conditions needs to be aplied')
+
+var knownTags = ['aa','bb']
+
+  tokenizer()
+    .input('#aa #bb #cc test')
+    .token({ tag: /#(\w{2})\ / })
+    .token({ input: /.+/ })
+    .walk(function(type, value, match) {
+      if(type == 'tag' && knownTags.indexOf(value) == -1) return false
+
+      console.log(type, value, match)
+    })
+
+print('Resolving to Object')
+
 var result = tokenizer()
-    .input('#aa test')
-    .token('tag', /#(\w{2})\ /)
-    .token('input', /.+/)
+    .input('#aa #bb #cc test')
+    .token({ tag: /#(\w{2})\ / })
+    .token({ input: /.+/ })
     .resolve()
 
-  console.log('resolved', result)
+  console.log(result)
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+  function print() {
+    console.log('----------------')
+    console.log.apply(console, arguments)
+    console.log('----------------')
+  }
+
+
+
