@@ -1,0 +1,19 @@
+{
+  "name": "phrase-detect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Damian Baar <damian.baar@gmail.com> (http://github.com/damianbaar)",
+  "license": "ISC",
+  "dependencies": {
+    "lodash.compact": "^3.0.0",
+    "lodash.keys": "^3.0.5",
+    "lodash.last": "^3.0.0",
+    "lodash.uniq": "^3.1.0",
+    "lodash.values": "^3.0.0",
+    "nodeunit": "^0.9.1"
+  }
+}
