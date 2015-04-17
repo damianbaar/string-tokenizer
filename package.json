@@ -1,29 +1,25 @@
 {
-  "name": "phrase-detect",
-  "version": "1.0.0",
-  "description": "",
+  "name": "string-tokenizer",
+  "version": "0.0.1",
+  "description": "Simple string tokenizer, to make RegExps less painful.",
   "main": "index.js",
   "scripts": {
     "test": "grunt test",
-    "build": "grunt build",
     "build": "grunt dev",
     "example": "node example"
   },
   "browser": {
-    "main": "./dist/tokenizer.js"
+    "main": "./dist/string-tokenizer.js"
   },
   "author": "Damian Baar <damian.baar@gmail.com> (http://github.com/damianbaar)",
   "license": "ISC",
   "dependencies": {
-    "lodash.assign": "^3.1.0",
-    "lodash.compact": "^3.0.0",
-    "lodash.find": "^3.2.0",
-    "lodash.isempty": "^3.0.2",
-    "lodash.keys": "^3.0.5",
-    "lodash.last": "^3.0.0",
-    "lodash.uniq": "^3.1.0",
-    "lodash.values": "^3.0.0",
-    "nodeunit": "^0.9.1"
+    "array-last": "^1.0.2",
+    "array-uniq": "^1.0.2",
+    "object-assign": "^2.0.0",
+    "object-keys": "^1.0.3",
+    "object-values": "^1.0.0",
+    "uniq": "^1.0.1"
   },
   "devDependencies": {
     "chai": "^2.2.0",

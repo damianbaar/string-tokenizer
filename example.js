@@ -55,7 +55,7 @@ var result = tokenizer()
   console.log(result)
 
 print('Creating helpers')
-//order removing from string
+
 var result = tokenizer()
     .input('/foo?a=10&b=15#test')
     .token('query', /(\?|\&)([^=]+)\=([^&#]+)/, function(values) {

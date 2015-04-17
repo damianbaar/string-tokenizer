@@ -3,15 +3,15 @@ var includeExternal = require('re-define-include-external')
 module.exports = function(grunt) {
 
   grunt.registerTask('test', ['mochaTest'])
-  grunt.registerTask('build', ['redefine:tokenizer:production'])
+  grunt.registerTask('build', ['redefine:string-tokenizer:production'])
   grunt.registerTask('dev', ['build', 'watch'])
 
   grunt.initConfig({
     redefine: {
-      "tokenizer": {
+      "string-tokenizer": {
           base: '/src'
         , wrapper: 'umd'
-        , names: { amd:"tokenizer", global:"db.tokenizer"}
+        , names: { amd:"string-tokenizer", global:"db.tokenizer"}
         , builds: {
           development: {
             showWarnings: true
@@ -22,9 +22,9 @@ module.exports = function(grunt) {
           , showWarnings: false
           }
         }
-        , transforms: [ includeExternal({ }) ]
+        , transforms: [ includeExternal({ discoverable: ['node_modules'] }) ]
         , src: ['./src/index.js']
-        , dest: './dist/tokenizer.js'
+        , dest: './dist/string-tokenizer.js'
       }
     },
 

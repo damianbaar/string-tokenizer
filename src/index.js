@@ -1,11 +1,10 @@
 var _ = {
-  keys: require('lodash.keys')
-, values: require('lodash.values')
-, uniq: require('lodash.uniq')
-, last: require('lodash.last')
-, compact: require('lodash.compact')
-, isEmpty: require('lodash.isempty')
-, assign: require('lodash.assign')
+  keys: require('object-keys')
+, values: require('object-values')
+, assign: require('object-assign')
+, uniq: require('uniq')
+, last: require('array-last')
+, compact: function(d) { return d.filter(function(d) { return d }) }
 }
 
 module.exports = function(input) {
@@ -88,7 +87,7 @@ module.exports = function(input) {
         helper = _helpers[names[i]]
 
         var part
-          , offset = !_.isEmpty(part = evalExpr()) ? part.lastIndex || part.index : -1
+          , offset = (part = evalExpr()) && part.length > 0 ? part.lastIndex || part.index : -1
           , matches
 
         function evalExpr() {
