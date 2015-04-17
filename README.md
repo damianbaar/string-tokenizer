@@ -1,10 +1,10 @@
 ## `string-tokenizer`
 
-Simple string tokenizer for easly applying some set of rules for particular phrase in `node` and `browser` without headache.
+Simple string tokenizer to easly define some set of rules for particular phrase in `node` and `browser` without headache.
 
-### Usege
+### Usage
 
-* to install for `node`/`common-js-browser-bundler`
+* install in `node`/`common-js-browser-bundler` env
 `npm install --save string-tokenizer`
 
 ```
@@ -35,7 +35,7 @@ var tokenizer = require('string-tokenizer')
 * basic functionallity
 
 ```
-    //Defining INTPUT
+    //Defining INPUT
     tokenizer(input?)                       //instance
       .input('#aa tes)                      //input
 
@@ -61,4 +61,3 @@ TODO
 ### Examples
 
 `npm run example` or open `example.html` file to play with it in console.
-
