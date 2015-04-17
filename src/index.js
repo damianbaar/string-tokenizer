@@ -12,6 +12,7 @@ module.exports = function(input) {
     , _tokens = {}
     , _helpers = {}
     , _input = input
+    , _debug = false
 
   self.input = function(input) {
     _input = input
@@ -32,6 +33,8 @@ module.exports = function(input) {
     addHelpers(m)
     return self
   }
+
+  self.debug = function() { return _debug = true, self }
 
   self.tokens = addTokens
   self.helpers = addHelpers
@@ -93,6 +96,7 @@ module.exports = function(input) {
         function evalExpr() {
           var r = expr.exec(_input)
           if(helper && r) r.push(helper(r, _input, expr.source))
+          debug('tag %s, index %s, exec %s', names[i], lastIndex, r)
           return r
         }
 
@@ -141,4 +145,5 @@ module.exports = function(input) {
 
   function noop() { }
   function is(expression, type) { return Object.prototype.toString.call(expression) == '[object ' + type + ']' }
+  function debug() { if(_debug) console.log.apply(console, arguments) }
 }

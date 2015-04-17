@@ -46,9 +46,11 @@ var tokenizer = require('string-tokenizer')
 
     //Invocation MODEs
     .walk(function(type, value, match) { })   //manual mode, invoked on each token
-
-    //OR 
+    //or
     .resolve()                                //auto mode, exporting tokens to object
+
+    //Debugging
+    .debug()                                  //...
 ```
 
 * skipping unwanted phrase during `walk`

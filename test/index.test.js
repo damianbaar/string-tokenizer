@@ -68,7 +68,6 @@ describe('tokenizer', function() {
     it('should match with nearest regexp index', function(done) {
       //given
       var input = '#aa #bb foo foo baz'
-        , knownTags = ['aa', 'bb']
 
       //when
       var r = {}
@@ -94,7 +93,6 @@ describe('tokenizer', function() {
       //given
       var input = '#aa #bb foo foo baz'
         , once = 'foo'
-        , knownTags = ['aa', 'bb']
 
       //when
       var r = {}
