@@ -63,4 +63,60 @@ describe('tokenizer', function() {
 
     done()
   })
+
+  describe('order, greediness and stuff of regexps', function() {
+    it('should match with nearest regexp index', function(done) {
+      //given
+      var input = '#aa #bb foo foo baz'
+        , knownTags = ['aa', 'bb']
+
+      //when
+      var r = {}
+        , t =
+        tokenizer(input)
+          .tokens({ tag: /#(\w{2})\ / })
+          .tokens({ foo: /\ ?(foo)/ })
+          .tokens({ input: /\ ?(.+)/ })
+          .walk(function(type, value, match) {
+            r[type] = r[type] || []
+            r[type].push(value)
+          })
+
+      //then 
+      expect(r.tag.join('')).to.equal(['aa','bb'].join(''))
+      expect(r.foo.length).to.equal(2)
+      expect(r.input.join('')).to.equal('baz')
+
+      done()
+    })
+
+    it('break after one was captured', function(done) {
+      //given
+      var input = '#aa #bb foo foo baz'
+        , once = 'foo'
+        , knownTags = ['aa', 'bb']
+
+      //when
+      var r = {}
+        , t =
+        tokenizer(input)
+          .tokens({ tag: /#(\w{2})\ / })
+          .tokens({ foo: /\ ?(foo)/ })
+          .tokens({ input: /\ ?(.+)/ })
+          .walk(function(type, value, match) {
+            if(r[type] && r[once]) return false //caputure only one /foo/
+
+            r[type] = r[type] || []
+            r[type].push(value)
+          })
+
+      //then 
+      expect(r.tag.join('')).to.equal(['aa','bb'].join(''))
+      expect(r.foo.length).to.equal(1)
+      expect(r.input.join('')).to.equal('foo baz')
+
+      done()
+    })
+  })
+
 })

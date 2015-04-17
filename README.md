@@ -42,6 +42,7 @@ var tokenizer = require('string-tokenizer')
     //Making DEFINITIONs
       .token('tag', /#(\w{2})\ /, helper?)    //define pattern as 'tag' with optional helper method
       .token('input', /.+/)                   //define pattern as 'input'
+      .token('name', string or RegExp)
 
     //Invocation MODEs
     .walk(function(type, value, match) { })   //manual mode, invoked on each token
