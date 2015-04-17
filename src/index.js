@@ -5,11 +5,13 @@ var _ = {
 , last: require('lodash.last')
 , compact: require('lodash.compact')
 , isEmpty: require('lodash.isempty')
+, assign: require('lodash.assign')
 }
 
 module.exports = function(input) {
   var self = {}
     , _tokens = {}
+    , _helpers = {}
     , _input = input
 
   self.input = function(input) {
@@ -17,13 +19,22 @@ module.exports = function(input) {
     return self
   }
 
-  self.tokens = self.token = addToken
+  // self.helper = function(token, callback) {
+  //   var m = {}
+  //   m[token] = callback
+  //   addHelpers(m)
+  //   return self
+  // }
+  //
+
+  self.tokens = self.token = addTokens
+  self.helpers = self.helper = addHelpers
   self.walk = walk
   self.resolve = resolve
 
   return self
 
-  function addToken(token) {
+  function addTokens(token) {
     var names = _.keys(token)
       , expressions = _.values(token)
       , expression
@@ -41,6 +52,11 @@ module.exports = function(input) {
     }
   }
 
+  function addHelpers(helpers) {
+    for(var helper in helpers) _helpers[ helper ] = helpers[ helper ]
+    return self
+  }
+
   function walk(onToken) {
     var cb = onToken || noop
 
@@ -54,26 +70,35 @@ module.exports = function(input) {
     return self
 
     function runFrom(lastIndex) {
-      var e
+      var expr
+        , helper
 
       for(var i = 0; i < tokens.length; i++) {
-        e = new RegExp(tokens[i], 'g')
-        e.lastIndex = lastIndex
+        expr = new RegExp(tokens[i], 'g')
+        expr.lastIndex = lastIndex
+
+        helper = _helpers[names[i]]
 
         var part
-          , idx = !_.isEmpty(part = e.exec(_input)) ? part.lastIndex || part.index : -1
-          , match
+          , offset = !_.isEmpty(part = evalExpr()) ? part.lastIndex || part.index : -1
+          , matches
 
-        if(idx == lastIndex) {
+        function evalExpr() {
+          var r = expr.exec(_input)
+          if(helper && r) r.push(helper(r, _input, expr.source))
+          return r
+        }
+
+        if(offset == lastIndex) {
 
           match = part || []
 
           var shouldSkip = cb(names[i], topMatch(match), _.uniq(_.compact(match)))
           if(typeof shouldSkip != 'undefined' && !shouldSkip) continue
 
-          idx += match[0].length
+          offset += match[0].length
 
-          return runFrom(idx)
+          return runFrom(offset)
         }
       }
     }
@@ -84,14 +109,27 @@ module.exports = function(input) {
 
   function resolve() {
     var r = { }
+
     walk(function(name, value, raw) { 
       if(is(r[name], 'Array')) return r[name].push(value)
       if(is(r[name], 'String')) return r[name] = ([value]).concat(r[name] || []).reverse()
+      if(is(r[name], 'Object')) return r[name] = _.assign(value, r[name])
 
-      r[name] = value 
+      r[name] = r[name] || []
+      r[name].push(value)
     })
+
     r._source = _input
-    return r
+
+    return simplify(r)
+
+    function simplify(r) {
+      for(var key in r)
+        if(is(r[key], 'Array') && r[key].length == 1) 
+          r[key] = r[key][0]
+
+      return r
+    }
   }
 
   function noop() { }

@@ -54,6 +54,32 @@ var result = tokenizer()
 
   console.log(result)
 
+print('Creating helpers')
+//order removing from string
+var result = tokenizer()
+    .input('/foo?a=10&b=15#test')
+    .tokens({ 
+      tag: /#(\w+)/,
+      page: /\/(\w+)?/,
+      query: /(\?|\&)([^=]+)\=([^&#]+)/
+    })
+    .helper({
+      query: function(values) {
+        //?a=10, &b=15
+        var param = values[0]
+                      .replace(/\&|\?/g, '')
+                      .split('=')
+
+        // var r = {}
+        // r[param[0]] = param[1]
+        // return r
+        return param
+      }
+    })
+    .resolve()
+
+console.log(result)
+
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
 
