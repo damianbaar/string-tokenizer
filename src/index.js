@@ -19,16 +19,24 @@ module.exports = function(input) {
     return self
   }
 
-  // self.helper = function(token, callback) {
-  //   var m = {}
-  //   m[token] = callback
-  //   addHelpers(m)
-  //   return self
-  // }
-  //
+  self.token = function(token, pattern, helper) {
+    var t = {}
+    t[token] = pattern
+    addTokens(t)
+    helper && self.helper(token, helper)
+    return self
+  }
 
-  self.tokens = self.token = addTokens
-  self.helpers = self.helper = addHelpers
+  self.helper = function(token, callback) {
+    var m = {}
+    m[token] = callback
+    addHelpers(m)
+    return self
+  }
+
+  self.tokens = addTokens
+  self.helpers = addHelpers
+
   self.walk = walk
   self.resolve = resolve
 

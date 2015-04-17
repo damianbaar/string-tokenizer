@@ -2,8 +2,8 @@ var includeExternal = require('re-define-include-external')
 
 module.exports = function(grunt) {
 
-  grunt.registerTask('teset', ['demo'])
-  grunt.registerTask('build', ['redefine:tokenizer:production', 'watch'])
+  grunt.registerTask('test', ['mochaTest'])
+  grunt.registerTask('build', ['redefine:tokenizer:production'])
   grunt.registerTask('dev', ['build', 'watch'])
 
   grunt.initConfig({
@@ -15,31 +15,38 @@ module.exports = function(grunt) {
         , builds: {
           development: {
             showWarnings: true
-          , dest: './dist/tokenizer.js'
+          , development: true
           },
           production: {
             development: false
           , showWarnings: false
-          , dest: './examples/first/out.production.js'
           }
         }
         , transforms: [ includeExternal({ }) ]
         , src: ['./src/index.js']
+        , dest: './dist/tokenizer.js'
       }
+    },
 
+    mochaTest: {
+      test: {
+        options: { reporter: 'spec' },
+        src: ['test/**/*.js']
+      }
     },
 
     watch: {
       scripts: {
-        files: ['./lib/**/*.js']
-        tasks: ['redefine:tokenizer:development'],
+        files: ['./src/*.js', './test/*.test.js', './example.js'],
+        tasks: ['redefine:tokenizer:development', 'mochaTest'],
         options: {
-          spawn: false
+          spawn: true
         }
       }
     }
   })
 
-  grunt.loadTasks('tasks')
+  grunt.loadNpmTasks('grunt-re-define')
+  grunt.loadNpmTasks('grunt-mocha-test')
   grunt.loadNpmTasks('grunt-contrib-watch')
 }

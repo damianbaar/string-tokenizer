@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grunt test",
+    "build": "grunt build",
+    "build": "grunt dev",
+    "example": "node example"
+  },
+  "browser": {
+    "main": "./dist/tokenizer.js"
   },
   "author": "Damian Baar <damian.baar@gmail.com> (http://github.com/damianbaar)",
   "license": "ISC",
@@ -18,5 +24,14 @@
     "lodash.uniq": "^3.1.0",
     "lodash.values": "^3.0.0",
     "nodeunit": "^0.9.1"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-re-define": "^0.5.3",
+    "mocha": "^2.2.4",
+    "re-define-include-external": "^0.3.5"
   }
 }
