@@ -42,7 +42,7 @@ var tokenizer = require('string-tokenizer')
     //Making DEFINITIONs
       .token('tag', /#(\w{2})\ /, helper?)    //define pattern as 'tag' with optional helper method
       .token('input', /.+/)                   //define pattern as 'input'
-      .token('name', string or RegExp)
+      .token('name', 'string or RegExp')
 
     //Invocation MODEs
     .walk(function(type, value, match) { })   //manual mode, invoked on each token
@@ -72,7 +72,7 @@ TODO
       .token('symbol', /[\w]+/)
     .resolve()
 
-  //result
+  //result .resolve()
   { symbol: [ 'Test', 'with', 'and', 'a' ],
     space: [ ' ', ' ', ' ', ' ', ' ' ],
     tag: [ '#tag', '#url' ],
@@ -98,4 +98,4 @@ TODO
     _source: 'Test with #tag and a http://google.com/ #url' }
 ```
 
-run `npm run example` or open `example.html` file to play with and get more insight.
+run `npm run example` or open `example.html` file to play with and get better overview.
