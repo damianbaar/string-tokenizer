@@ -57,7 +57,7 @@ var result = tokenizer()
 print('Creating helpers')
 
 var result = tokenizer()
-    .input('/foo?a=10&b=15#test')
+    .input('/foo/baz/bar?a=10&b=15&test=100#test')
     .token('query', /(\?|\&)([^=]+)\=([^&#]+)/, function(values) {
       //?a=10, &b=15
       return values[0]
@@ -66,6 +66,32 @@ var result = tokenizer()
     })
     .tokens({ tag: /#(\w+)/, page: /\/(\w+)?/ })
     .resolve()
+
+console.log(result)
+
+print('Parsing complex input')
+
+var result = 
+  tokenizer()
+    .input('Test with #tag and a http://google.com/ #url')
+      .token('tag', /#[\w\d-_]+/)
+      .token('url', /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/, function(values){ return values[0] })
+      .token('space', /[\s]+/)
+      .token('symbol', /[\w]+/)
+    .resolve(true)
+
+console.log(result)
+
+print('Returns tokens with info about position')
+
+var result = 
+  tokenizer()
+    .input('A hello world B')
+      .token('hello', /hello/)
+      .token('world', /world/)
+      .token('A or B', /[AB]/)
+      .token('space', /[\s]+/)
+    .resolve(true)
 
 console.log(result)
 

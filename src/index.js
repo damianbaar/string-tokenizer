@@ -104,10 +104,11 @@ module.exports = function(input) {
 
           match = part || []
 
-          var shouldSkip = cb(names[i], topMatch(match), _.uniq(_.compact(match)))
+          offset += match[0].length
+
+          var shouldSkip = cb(names[i], topMatch(match), i, lastIndex, _.uniq(_.compact(match)))
           if(typeof shouldSkip != 'undefined' && !shouldSkip) continue
 
-          offset += match[0].length
 
           return runFrom(offset)
         }
@@ -118,10 +119,12 @@ module.exports = function(input) {
     function evaluateExpression(tokens) { return new RegExp(tokens.join('|'), 'g') }
   }
 
-  function resolve() {
+  function resolve(postionInfo) {
     var r = { }
 
-    walk(function(name, value, raw) { 
+    walk(function(name, value, tokenIndex, position, rawExec) { 
+      if(postionInfo) value = { value:value, position: position }
+
       if(is(r[name], 'Array')) return r[name].push(value)
       if(is(r[name], 'String')) return r[name] = ([value]).concat(r[name] || []).reverse()
       if(is(r[name], 'Object')) return r[name] = _.assign(value, r[name])
