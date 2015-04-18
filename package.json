@@ -1,6 +1,6 @@
 {
   "name": "string-tokenizer",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Simple string tokenizer, to make RegExps less painful.",
   "main": "index.js",
   "scripts": {
