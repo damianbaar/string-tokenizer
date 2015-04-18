@@ -43,10 +43,16 @@ var tokenizer = require('string-tokenizer')
       .token('tag', /#(\w{2})\ /, helper?)    //define pattern as 'tag' with optional helper method
       .token('input', /.+/)                   //define pattern as 'input'
       .token('tokenName', 'string or RegExp')
+      
+      //from object
+      .tokens({ tag: 'pattern', query: 'pattern'}
     
     //Adding HELPERs to prettify matched result value (RegExp.exec)
       .helper('url', function(values){ return values[0] + values[1] })
       .helper('tokenName', function(values){ return values })
+
+      //from object
+      .helpers({ tag: function(val) {}, query: function(val) {} })
 
     //Invocation MODEs
     .walk(function(type, value, match) { })   //manual mode, invoked on each token
