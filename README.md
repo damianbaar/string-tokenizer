@@ -37,7 +37,7 @@ var tokenizer = require('string-tokenizer')
 ```js
     //Defining INPUT
     tokenizer(input?)                       //instance
-      .input('#aa tes)                      //input
+      .input('#aa tes')                     //input
 
     //Making DEFINITIONs
       .token('tag', /#(\w{2})\ /, helper?)    //define pattern as 'tag' with optional helper method
