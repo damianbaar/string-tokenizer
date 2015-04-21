@@ -58,7 +58,8 @@ print('Creating helpers')
 
 var result = tokenizer()
     .input('/foo/baz/bar?a=10&b=15&test=100#test')
-    .token('query', /(\?|\&)([^=]+)\=([^&#]+)/, function(values) {
+    .token('query', /(?:\?|\&)([^=]+)\=([^&#]+)/, function(values) {
+      console.log('sadsad', values)
       //?a=10, &b=15
       return values[0]
               .replace(/\&|\?/g, '')

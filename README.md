@@ -1,6 +1,14 @@
 ## `string-tokenizer`
 
-Simple string tokenizer to easly define some set of rules for particular phrase in `node` and `browser` without headache.
+Break your string into tokens in `node` and `browser` without headache.
+
+### Why
+* missing named groups in 'RegExp' in js
+* to make code cleaner and easier to follow, parsing is not always an elegant thing
+* `RegExp.source` concatenation '(//)|(//)|..' is not too flexible
+* `JSON` as token provider out of the box
+* to keep `RegExps` simple
+* to provide easy way to assest whether something should be a token or not based upon external data
 
 ### Usage
 
