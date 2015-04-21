@@ -3,17 +3,20 @@
 Break your string into tokens in `node` and `browser` without headache.
 
 ### Why
-* missing named groups in 'RegExp' in js
+* missing named groups in `RegExp` in js
 * to make code cleaner and easier to follow, parsing is not always an elegant thing
-* `RegExp.source` concatenation '(//)|(//)|..' is not too flexible
+* `RegExp.source` concatenation `(/foo/)|(/baz/)|..` is not too flexible
 * `JSON` as token provider out of the box
 * to keep `RegExps` simple
 * to provide easy way to assest whether something should be a token or not based upon external data
 
 ### Usage
 
-* install in `node`/`common-js-browser-bundler` env
-`npm install --save string-tokenizer`
+* in `node` or any other `common-js-browser-bundler` (browserify/re-define)` 
+
+```
+npm install --save string-tokenizer
+```
 
 ```js
 var tokenizer = require('string-tokenizer')
