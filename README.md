@@ -12,7 +12,7 @@ Break your string into tokens in `node` and `browser` without headache.
 
 ### Usage
 
-* in `node` or any other `common-js-browser-bundler` (browserify/re-define)` 
+* in `node` or any other `common-js-browser-bundler`
 
 ```
 npm install --save string-tokenizer
