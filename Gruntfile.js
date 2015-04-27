@@ -38,7 +38,7 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: ['./src/*.js', './test/*.test.js', './example.js'],
-        tasks: ['redefine:tokenizer:development', 'mochaTest'],
+        tasks: ['redefine:string-tokenizer:development', 'mochaTest'],
         options: {
           spawn: true
         }

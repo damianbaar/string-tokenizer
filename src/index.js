@@ -78,41 +78,56 @@ module.exports = function(input) {
     runFrom(0)
 
     return self
-
-    function runFrom(lastIndex) {
+    
+    //TODO: some house keeping needed ... ;)
+    function runFrom(lastIndex, ignore) {
       var expr
-        , helper
+        , helper 
 
-      for(var i = 0; i < tokens.length; i++) {
-        expr = new RegExp(tokens[i], 'g')
-        expr.lastIndex = lastIndex
+      if(lastIndex > _input.length) return
 
-        helper = _helpers[names[i]]
+      var p = -1
+        , _i = _input.substr(lastIndex)
+        , helpers
+        , expr
+        , idx = -1
+        , min = Infinity
 
-        var part
-          , offset = (part = evalExpr()) && part.length > 0 ? part.lastIndex || part.index : -1
-          , matches
+      var idxs = []
 
-        function evalExpr() {
-          var r = expr.exec(_input)
-          if(helper && r) r.push(helper(r, _input, expr.source))
-          debug('tag %s, index %s, exec %s', names[i], lastIndex, r)
-          return r
+      tokens.forEach(function(d, i) {
+        var a = new RegExp(d, 'g')
+        a.lastIndex = lastIndex
+        idxs[i] = ignore == i ? -1 : _i.search(a)
+
+        if(min > idxs[i] && idxs[i] > -1) {
+          expr = a
+          min = idxs[i]
+          idx = i
         }
+      })
 
-        if(offset == lastIndex) {
+      if(idx == -1) return
 
-          match = part || []
+      var part
+        , offset = (part = evalExpr()) && part.length > 0 ? part.lastIndex || part.index : -1
+        , match
 
-          offset += match[0].length
-
-          var shouldSkip = cb(names[i], topMatch(match), i, lastIndex, _.uniq(_.compact(match)))
-          if(typeof shouldSkip != 'undefined' && !shouldSkip) continue
-
-
-          return runFrom(offset)
-        }
+      function evalExpr() {
+        var r = expr.exec(_input)
+        if(helper && r) r.push(helper(r, _input, expr.source))
+        debug('tag %s, index %s, exec %s', names[idx], lastIndex, r)
+        return r
       }
+
+      match = part || ['']
+
+      offset += match[0].length
+
+      var shouldSkip = cb(names[idx], topMatch(match), idx, lastIndex, _.uniq(_.compact(match)))
+      if(typeof shouldSkip != 'undefined' && !shouldSkip) return runFrom(offset - match[0].length, idx)
+
+      return runFrom(offset)
     }
 
     function topMatch(arr) { return _.last(_.compact(arr)) }

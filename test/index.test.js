@@ -117,4 +117,26 @@ describe('tokenizer', function() {
     })
   })
 
+  describe('nearest patterns, not adjencted RegExps', function() {
+    it('should match with nearest regexp index', function(done) {
+
+      var input = '$aa _bb #cc %dd &ee '
+
+      //when
+      var t =
+        tokenizer(input)
+          .tokens({ a: /\$(\w{2})\ / })
+          .tokens({ c: /\#(\w{2})\ / })
+          .tokens({ e: /\&(\w{2})\ / })
+          .resolve()
+
+      //then 
+      expect(t.a).to.equal('aa')
+      expect(t.c).to.equal('cc')
+      expect(t.e).to.equal('ee')
+
+      done()
+    })
+  })
+
 })

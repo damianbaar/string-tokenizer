@@ -1,5 +1,5 @@
-//re-define version:1.14.6
-//library version:0.0.1
+//re-define version:1.14.8
+//library version:0.0.6
 ;(function (parent, factory){
   if (typeof define === 'function' && define.amd) {
     define('string-tokenizer', [], factory)
@@ -281,6 +281,7 @@
       var _tokens = {};
       var _helpers = {};
       var _input = input;
+      var _debug = false;
       self.input = function (input) {
         _input = input;
         return self;
@@ -297,6 +298,9 @@
         m[token] = callback;
         addHelpers(m);
         return self;
+      };
+      self.debug = function () {
+        return _debug = true, self;
       };
       self.tokens = addTokens;
       self.helpers = addHelpers;
@@ -331,31 +335,46 @@
           throw new Error('Define at least one token');
         runFrom(0);
         return self;
-        function runFrom(lastIndex) {
+        function runFrom(lastIndex, ignore) {
           var expr;
           var helper;
-          for (var i = 0; i < tokens.length; i++) {
-            expr = new RegExp(tokens[i], 'g');
-            expr.lastIndex = lastIndex;
-            helper = _helpers[names[i]];
-            var part;
-            var offset = (part = evalExpr()) && part.length > 0 ? part.lastIndex || part.index : -1;
-            var matches;
-            function evalExpr() {
-              var r = expr.exec(_input);
-              if (helper && r)
-                r.push(helper(r, _input, expr.source));
-              return r;
+          if (lastIndex > _input.length)
+            return;
+          var p = -1;
+          var _i = _input.substr(lastIndex);
+          var helpers;
+          var expr;
+          var idx = -1;
+          var min = Infinity;
+          var idxs = [];
+          tokens.forEach(function (d, i) {
+            var a = new RegExp(d, 'g');
+            a.lastIndex = lastIndex;
+            idxs[i] = ignore == i ? -1 : _i.search(a);
+            if (min > idxs[i] && idxs[i] > -1) {
+              expr = a;
+              min = idxs[i];
+              idx = i;
             }
-            if (offset == lastIndex) {
-              match = part || [];
-              var shouldSkip = cb(names[i], topMatch(match), _.uniq(_.compact(match)));
-              if (typeof shouldSkip != 'undefined' && !shouldSkip)
-                continue;
-              offset += match[0].length;
-              return runFrom(offset);
-            }
+          });
+          if (idx == -1)
+            return;
+          var part;
+          var offset = (part = evalExpr()) && part.length > 0 ? part.lastIndex || part.index : -1;
+          var match;
+          function evalExpr() {
+            var r = expr.exec(_input);
+            if (helper && r)
+              r.push(helper(r, _input, expr.source));
+            debug('tag %s, index %s, exec %s', names[idx], lastIndex, r);
+            return r;
           }
+          match = part || [''];
+          offset += match[0].length;
+          var shouldSkip = cb(names[idx], topMatch(match), idx, lastIndex, _.uniq(_.compact(match)));
+          if (typeof shouldSkip != 'undefined' && !shouldSkip)
+            return runFrom(offset - match[0].length, idx);
+          return runFrom(offset);
         }
         function topMatch(arr) {
           return _.last(_.compact(arr));
@@ -364,9 +383,14 @@
           return new RegExp(tokens.join('|'), 'g');
         }
       }
-      function resolve() {
+      function resolve(postionInfo) {
         var r = {};
-        walk(function (name, value, raw) {
+        walk(function (name, value, tokenIndex, position, rawExec) {
+          if (postionInfo)
+            value = {
+              value: value,
+              position: position
+            };
           if (is(r[name], 'Array'))
             return r[name].push(value);
           if (is(r[name], 'String'))
@@ -389,6 +413,10 @@
       }
       function is(expression, type) {
         return Object.prototype.toString.call(expression) == '[object ' + type + ']';
+      }
+      function debug() {
+        if (_debug)
+          console.log.apply(console, arguments);
       }
     };
 }]
