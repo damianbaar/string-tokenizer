@@ -1,5 +1,5 @@
 //re-define version:1.14.8
-//library version:0.0.6
+//library version:0.0.7
 ;(function (parent, factory){
   if (typeof define === 'function' && define.amd) {
     define('string-tokenizer', [], factory)
@@ -336,24 +336,20 @@
         runFrom(0);
         return self;
         function runFrom(lastIndex, ignore) {
-          var expr;
-          var helper;
           if (lastIndex > _input.length)
             return;
-          var p = -1;
-          var _i = _input.substr(lastIndex);
-          var helpers;
           var expr;
+          var _i = _input.substr(lastIndex);
           var idx = -1;
           var min = Infinity;
-          var idxs = [];
           tokens.forEach(function (d, i) {
-            var a = new RegExp(d, 'g');
-            a.lastIndex = lastIndex;
-            idxs[i] = ignore == i ? -1 : _i.search(a);
-            if (min > idxs[i] && idxs[i] > -1) {
-              expr = a;
-              min = idxs[i];
+            var _expr = new RegExp(d, 'g');
+            var _min;
+            _expr.lastIndex = lastIndex;
+            _min = ignore == i ? -1 : _i.search(_expr);
+            if (min > _min && _min > -1) {
+              expr = _expr;
+              min = _min;
               idx = i;
             }
           });
@@ -364,6 +360,7 @@
           var match;
           function evalExpr() {
             var r = expr.exec(_input);
+            var helper = _helpers[names[idx]];
             if (helper && r)
               r.push(helper(r, _input, expr.source));
             debug('tag %s, index %s, exec %s', names[idx], lastIndex, r);

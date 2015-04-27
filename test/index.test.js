@@ -117,7 +117,7 @@ describe('tokenizer', function() {
     })
   })
 
-  describe('nearest patterns, not adjencted RegExps', function() {
+  describe('nearest patterns, not adjacent RegExps', function() {
     it('should match with nearest regexp index', function(done) {
 
       var input = '$aa _bb #cc %dd &ee '

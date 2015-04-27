@@ -81,28 +81,24 @@ module.exports = function(input) {
     
     //TODO: some house keeping needed ... ;)
     function runFrom(lastIndex, ignore) {
-      var expr
-        , helper 
 
       if(lastIndex > _input.length) return
 
-      var p = -1
+      var expr
         , _i = _input.substr(lastIndex)
-        , helpers
-        , expr
         , idx = -1
         , min = Infinity
 
-      var idxs = []
-
       tokens.forEach(function(d, i) {
-        var a = new RegExp(d, 'g')
-        a.lastIndex = lastIndex
-        idxs[i] = ignore == i ? -1 : _i.search(a)
+        var _expr = new RegExp(d, 'g')
+          , _min
 
-        if(min > idxs[i] && idxs[i] > -1) {
-          expr = a
-          min = idxs[i]
+        _expr.lastIndex = lastIndex
+        _min = ignore == i ? -1 : _i.search(_expr)
+
+        if(min > _min && _min > -1) {
+          expr = _expr
+          min = _min
           idx = i
         }
       })
@@ -115,6 +111,8 @@ module.exports = function(input) {
 
       function evalExpr() {
         var r = expr.exec(_input)
+          , helper = _helpers[names[idx]]
+
         if(helper && r) r.push(helper(r, _input, expr.source))
         debug('tag %s, index %s, exec %s', names[idx], lastIndex, r)
         return r
